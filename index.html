@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Classifier</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            color: #fff;
+        }
+
+        /* Navigation Bar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav .menu a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero .cta-btn {
+            padding: 15px 30px;
+            font-size: 1rem;
+            background: #00c6ff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hero .cta-btn:hover {
+            background: #02a9f7;
+            transform: translateY(-2px);
+        }
+
+        /* Main Section */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            color: #333;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .container h2 {
+            text-align: center;
+            color: #4e54c8;
+            margin-bottom: 20px;
+        }
+
+        .container p, ul {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            background: #4e54c8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #8f94fb;
+        }
+
+        /* Footer Section */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            margin-top: 30px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">Resume Classifier</div>
+        <div class="menu">
+            <a href="#">Products</a>
+            <a href="#">Login</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Improve Your Resume with AI</h1>
+        <p>
+            This Resume Classifier uses cutting-edge AI to analyze your resume summary and predict the most relevant job role. 
+            Paste your resume summary below to get started!
+        </p>
+        <button class="cta-btn">Paste Resume Summary</button>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="container">
+        <h2>Paste Your Resume Summary</h2>
+        <p>
+            Please paste the summary of your resume in the text box below. Ensure the text is concise and clear for better predictions.
+        </p>
+        <textarea id="resume" placeholder="Enter your resume summary here..."></textarea>
+        <button type="button" onclick="submitResume()">Classify Resume</button>
+        <div id="result" class="result"></div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 Resume Classifier | Powered by Machine Learning</p>
+    </footer>
+
+    <script>
+        async function submitResume() {
+            const resumeText = document.getElementById('resume').value;
+            const resultDiv = document.getElementById('result');
+
+            // Clear previous results
+            resultDiv.innerText = '';
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ resume: resumeText })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'An unknown error occurred');
+                }
+
+                // Display the predicted job role
+                resultDiv.innerHTML = `<h3>Predicted Job Role: ${data.job_role}</h3>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<h3 style="color: red;">Error: ${error.message}</h3>`;
+            }
+        }
+    </script>
+</body>
+</html>
