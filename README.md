@@ -11,3 +11,5 @@ Scalable and Extensible: Designed to integrate with larger systems or workflows.
 User-Friendly API: RESTful interface for easy integration with web and mobile applications.
 
 Pretrained Models: Includes pretrained logistic regression and TF-IDF vectorizer for quick setup.
+
+![image](https://github.com/user-attachments/assets/96c1abc9-714c-4499-87dc-31556b46ff67)
