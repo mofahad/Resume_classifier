@@ -148,12 +148,12 @@
 
     <!-- Hero Section -->
     <div class="hero">
-        <h1>Improve Your Resume with AI</h1>
+        <h1>Explore Resume Text Classification</h1>
         <p>
-            This Resume Classifier uses cutting-edge AI to analyze your resume summary and predict the most relevant job role. 
-            Paste your resume summary below to get started!
+            Try a local TF-IDF and logistic regression prototype. The included demo uses synthetic examples
+            and is not validated for hiring decisions. Paste a summary to explore its predictions.
         </p>
-        <button class="cta-btn">Paste Resume Summary</button>
+        <button class="cta-btn" onclick="document.getElementById('resume').focus()">Paste Resume Summary</button>
     </div>
 
     <!-- Main Content Section -->
@@ -162,9 +162,9 @@
         <p>
             Please paste the summary of your resume in the text box below. Ensure the text is concise and clear for better predictions.
         </p>
-        <textarea id="resume" placeholder="Enter your resume summary here..."></textarea>
+        <textarea id="resume" aria-label="Resume summary" maxlength="20000" placeholder="Enter your resume summary here..."></textarea>
         <button type="button" onclick="submitResume()">Classify Resume</button>
-        <div id="result" class="result"></div>
+        <div id="result" class="result" role="status" aria-live="polite"></div>
     </div>
 
     <!-- Footer Section -->
@@ -195,9 +195,9 @@
                 }
 
                 // Display the predicted job role
-                resultDiv.innerHTML = `<h3>Predicted Job Role: ${data.job_role}</h3>`;
+                resultDiv.textContent = `Predicted text category: ${data.job_role}. ${data.note}`;
             } catch (error) {
-                resultDiv.innerHTML = `<h3 style="color: red;">Error: ${error.message}</h3>`;
+                resultDiv.textContent = `Error: ${error.message}`;
             }
         }
     </script>
