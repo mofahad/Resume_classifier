@@ -1,7 +1,9 @@
 """Train a baseline. Synthetic demo examples are not a performance benchmark."""
 import argparse
 import csv
+import hashlib
 import json
+from collections import Counter
 from pathlib import Path
 import joblib
 from sklearn.metrics import accuracy_score, classification_report, f1_score
@@ -36,29 +38,41 @@ DEMO = {
     ],
 }
 
-def load_rows(path):
+def load_rows(path, return_summary=False):
     if path is None:
-        return [(text, label) for label, examples in DEMO.items() for text in examples]
-    with open(path, encoding='utf-8-sig', newline='') as stream:
-        reader = csv.DictReader(stream)
-        if not {'Resume_str', 'Category'} <= set(reader.fieldnames or []):
-            raise ValueError('CSV must contain Resume_str and Category columns.')
-        rows = [(r['Resume_str'], r['Category'].strip()) for r in reader
-                if r['Resume_str'] and r['Category'] and clean_text(r['Resume_str'])]
+        rows = [(text, label) for label, examples in DEMO.items() for text in examples]
+        raw_count, source_hash = len(rows), None
+    else:
+        rows = []
+        raw_count = 0
+        source_hash = hashlib.sha256(Path(path).read_bytes()).hexdigest()
+        with open(path, encoding='utf-8-sig', newline='') as stream:
+            reader = csv.DictReader(stream)
+            if not {'Resume_str', 'Category'} <= set(reader.fieldnames or []):
+                raise ValueError('CSV must contain Resume_str and Category columns.')
+            for row in reader:
+                raw_count += 1
+                text, label = row.get('Resume_str') or '', (row.get('Category') or '').strip()
+                if label and clean_text(text):
+                    rows.append((text, label))
     unique = {}
     for text, label in rows:
         key = clean_text(text)
         if key in unique and unique[key][1] != label:
             raise ValueError('Identical normalized text has conflicting categories.')
         unique[key] = (text, label)
-    return list(unique.values())
+    result = list(unique.values())
+    summary = {'input_rows':raw_count, 'skipped_rows':raw_count-len(rows),
+               'exact_normalized_duplicates_removed':len(rows)-len(result),
+               'retained_rows':len(result), 'source_sha256':source_hash}
+    return (result, summary) if return_summary else result
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--csv', type=Path)
     parser.add_argument('--output', type=Path, default=ROOT / 'artifacts')
     args = parser.parse_args()
-    rows = load_rows(args.csv)
+    rows, data_summary = load_rows(args.csv, return_summary=True)
     counts = {}
     for _, label in rows:
         counts[label] = counts.get(label, 0) + 1
@@ -69,12 +83,23 @@ def main():
         texts, labels, test_size=max(len(counts), round(len(rows) * .25)), stratify=labels, random_state=42)
     model = make_pipeline().fit(x_train, y_train)
     predictions = model.predict(x_test)
+    majority_class = Counter(y_train).most_common(1)[0][0]
+    majority_predictions = [majority_class] * len(y_test)
+    def split_hash(texts, labels):
+        content = json.dumps(list(zip(texts, labels)), ensure_ascii=False, separators=(',', ':'))
+        return hashlib.sha256(content.encode('utf-8')).hexdigest()
     metrics = {
         'dataset': 'user_supplied_csv' if args.csv else 'synthetic_demo',
         'seed': 42, 'train_rows': len(x_train), 'test_rows': len(x_test), 'class_counts': counts,
+        'data_audit':data_summary,
+        'split': {'method':'stratified random holdout after exact normalized deduplication',
+                  'train_sha256':split_hash(x_train,y_train), 'test_sha256':split_hash(x_test,y_test)},
+        'model':'TF-IDF word unigrams/bigrams + class-balanced logistic regression',
         'accuracy': accuracy_score(y_test, predictions),
         'macro_f1': f1_score(y_test, predictions, average='macro', zero_division=0),
         'classification_report': classification_report(y_test, predictions, output_dict=True, zero_division=0),
+        'majority_baseline': {'class':majority_class, 'accuracy':accuracy_score(y_test, majority_predictions),
+                              'macro_f1':f1_score(y_test,majority_predictions,average='macro',zero_division=0)},
         'limitations': 'Synthetic demo scores do not estimate real resume performance.' if not args.csv
                       else 'One stratified holdout; near-duplicates and source bias are not measured.',
     }

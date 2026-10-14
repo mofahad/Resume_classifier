@@ -30,7 +30,7 @@ class ClassifierTests(unittest.TestCase):
         self.assertEqual(response.json['dataset'], 'synthetic_demo')
 
     def test_invalid_inputs(self):
-        for body in ({}, [], {'resume': None}, {'resume': '  '}, {'resume': 12}, {'resume': '1234'}, {'resume': 'a' * 20001}):
+        for body in ({}, [], {'resume': None}, {'resume': '  '}, {'resume': 12}, {'resume': '1234'}, {'resume': 'a' * 50001}):
             self.assertEqual(self.client.post('/predict', json=body).status_code, 400)
         self.assertEqual(self.client.post('/predict', data='broken', content_type='application/json').status_code, 400)
 
@@ -41,6 +41,11 @@ class ClassifierTests(unittest.TestCase):
         client = create_app(Path(self.temp.name) / 'missing.joblib').test_client()
         self.assertEqual(client.get('/health').status_code, 503)
         self.assertEqual(client.post('/predict', json={'resume': 'Accounting experience'}).status_code, 503)
+
+    def test_long_valid_resume_is_supported(self):
+        text = ('Accounting ' * 4545) + 'books'
+        self.assertEqual(len(text), 50000)
+        self.assertEqual(self.client.post('/predict', json={'resume':text}).status_code, 200)
 
 if __name__ == '__main__':
     unittest.main()

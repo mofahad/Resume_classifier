@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent
 
 def create_app(model_path=None):
     app = Flask(__name__, static_folder=None)
-    app.config['MAX_CONTENT_LENGTH'] = 100_000
+    app.config['MAX_CONTENT_LENGTH'] = 250_000
     artifact = Path(model_path or os.environ.get('MODEL_PATH', ROOT / 'artifacts/classifier.joblib'))
     model = joblib.load(artifact) if artifact.is_file() else None
     dataset = 'unknown'
@@ -31,8 +31,8 @@ def create_app(model_path=None):
         if not isinstance(data, dict) or not isinstance(data.get('resume'), str):
             return jsonify(error='Send a JSON object containing a resume string.'), 400
         text = data['resume'].strip()
-        if not text or len(text) > 20000 or not any(c.isalpha() for c in text):
-            return jsonify(error='Resume must contain letters and be between 1 and 20000 characters.'), 400
+        if not text or len(text) > 50000 or not any(c.isalpha() for c in text):
+            return jsonify(error='Resume must contain letters and be between 1 and 50000 characters.'), 400
         if model is None:
             return jsonify(error='Model missing. Run python train.py first.'), 503
         if model.named_steps['tfidf'].transform([text]).nnz == 0:
