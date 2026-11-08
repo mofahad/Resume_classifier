@@ -1,0 +1,228 @@
+{
+  "recorded_date": "2026-10-14",
+  "metrics": {
+    "dataset": "user_supplied_csv",
+    "seed": 42,
+    "train_rows": 1861,
+    "test_rows": 620,
+    "class_counts": {
+      "HR": 110,
+      "DESIGNER": 107,
+      "INFORMATION-TECHNOLOGY": 120,
+      "TEACHER": 102,
+      "ADVOCATE": 118,
+      "BUSINESS-DEVELOPMENT": 119,
+      "HEALTHCARE": 115,
+      "FITNESS": 117,
+      "AGRICULTURE": 63,
+      "BPO": 22,
+      "SALES": 116,
+      "CONSULTANT": 115,
+      "DIGITAL-MEDIA": 96,
+      "AUTOMOBILE": 36,
+      "CHEF": 118,
+      "FINANCE": 117,
+      "APPAREL": 97,
+      "ENGINEERING": 118,
+      "ACCOUNTANT": 118,
+      "CONSTRUCTION": 112,
+      "PUBLIC-RELATIONS": 111,
+      "BANKING": 115,
+      "ARTS": 103,
+      "AVIATION": 116
+    },
+    "data_audit": {
+      "input_rows": 2484,
+      "skipped_rows": 1,
+      "exact_normalized_duplicates_removed": 2,
+      "retained_rows": 2481,
+      "source_sha256": "816a7cd985a9a41e3ce8d1e83cb7e1beb1e854a89c1cf1fd0d75494faaa0559d"
+    },
+    "split": {
+      "method": "stratified random holdout after exact normalized deduplication",
+      "train_sha256": "f8cc3f3b58001437487a8ce3ba4b3b053fdd0c69b5974431664fca6c3683de4d",
+      "test_sha256": "d15868f21e792d002b90e6079e91bbc4dbeab11b3fd3e7cfb21509e78da3a012"
+    },
+    "model": "TF-IDF word unigrams/bigrams + class-balanced logistic regression",
+    "accuracy": 0.6564516129032258,
+    "macro_f1": 0.6302596511748213,
+    "classification_report": {
+      "ACCOUNTANT": {
+        "precision": 0.5853658536585366,
+        "recall": 0.8275862068965517,
+        "f1-score": 0.6857142857142857,
+        "support": 29.0
+      },
+      "ADVOCATE": {
+        "precision": 0.4375,
+        "recall": 0.4827586206896552,
+        "f1-score": 0.45901639344262296,
+        "support": 29.0
+      },
+      "AGRICULTURE": {
+        "precision": 0.6,
+        "recall": 0.5625,
+        "f1-score": 0.5806451612903226,
+        "support": 16.0
+      },
+      "APPAREL": {
+        "precision": 0.625,
+        "recall": 0.20833333333333334,
+        "f1-score": 0.3125,
+        "support": 24.0
+      },
+      "ARTS": {
+        "precision": 0.6153846153846154,
+        "recall": 0.3076923076923077,
+        "f1-score": 0.41025641025641024,
+        "support": 26.0
+      },
+      "AUTOMOBILE": {
+        "precision": 0.5,
+        "recall": 0.5555555555555556,
+        "f1-score": 0.5263157894736842,
+        "support": 9.0
+      },
+      "AVIATION": {
+        "precision": 0.84,
+        "recall": 0.7241379310344828,
+        "f1-score": 0.7777777777777778,
+        "support": 29.0
+      },
+      "BANKING": {
+        "precision": 0.76,
+        "recall": 0.6551724137931034,
+        "f1-score": 0.7037037037037037,
+        "support": 29.0
+      },
+      "BPO": {
+        "precision": 0.6666666666666666,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.4444444444444444,
+        "support": 6.0
+      },
+      "BUSINESS-DEVELOPMENT": {
+        "precision": 0.5454545454545454,
+        "recall": 0.8,
+        "f1-score": 0.6486486486486487,
+        "support": 30.0
+      },
+      "CHEF": {
+        "precision": 0.8148148148148148,
+        "recall": 0.7586206896551724,
+        "f1-score": 0.7857142857142857,
+        "support": 29.0
+      },
+      "CONSTRUCTION": {
+        "precision": 0.8518518518518519,
+        "recall": 0.8214285714285714,
+        "f1-score": 0.8363636363636363,
+        "support": 28.0
+      },
+      "CONSULTANT": {
+        "precision": 0.5,
+        "recall": 0.1724137931034483,
+        "f1-score": 0.2564102564102564,
+        "support": 29.0
+      },
+      "DESIGNER": {
+        "precision": 0.7777777777777778,
+        "recall": 0.7777777777777778,
+        "f1-score": 0.7777777777777778,
+        "support": 27.0
+      },
+      "DIGITAL-MEDIA": {
+        "precision": 0.7222222222222222,
+        "recall": 0.5416666666666666,
+        "f1-score": 0.6190476190476191,
+        "support": 24.0
+      },
+      "ENGINEERING": {
+        "precision": 0.71875,
+        "recall": 0.7931034482758621,
+        "f1-score": 0.7540983606557377,
+        "support": 29.0
+      },
+      "FINANCE": {
+        "precision": 0.8095238095238095,
+        "recall": 0.5862068965517241,
+        "f1-score": 0.68,
+        "support": 29.0
+      },
+      "FITNESS": {
+        "precision": 0.8695652173913043,
+        "recall": 0.6896551724137931,
+        "f1-score": 0.7692307692307693,
+        "support": 29.0
+      },
+      "HEALTHCARE": {
+        "precision": 0.5161290322580645,
+        "recall": 0.5517241379310345,
+        "f1-score": 0.5333333333333333,
+        "support": 29.0
+      },
+      "HR": {
+        "precision": 0.8275862068965517,
+        "recall": 0.8888888888888888,
+        "f1-score": 0.8571428571428571,
+        "support": 27.0
+      },
+      "INFORMATION-TECHNOLOGY": {
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1-score": 0.8,
+        "support": 30.0
+      },
+      "PUBLIC-RELATIONS": {
+        "precision": 0.6285714285714286,
+        "recall": 0.7857142857142857,
+        "f1-score": 0.6984126984126984,
+        "support": 28.0
+      },
+      "SALES": {
+        "precision": 0.4186046511627907,
+        "recall": 0.6206896551724138,
+        "f1-score": 0.5,
+        "support": 29.0
+      },
+      "TEACHER": {
+        "precision": 0.6111111111111112,
+        "recall": 0.8461538461538461,
+        "f1-score": 0.7096774193548387,
+        "support": 26.0
+      },
+      "accuracy": 0.6564516129032258,
+      "macro avg": {
+        "precision": 0.6628561029755315,
+        "recall": 0.6371297305025753,
+        "f1-score": 0.6302596511748213,
+        "support": 620.0
+      },
+      "weighted avg": {
+        "precision": 0.6682578806603026,
+        "recall": 0.6564516129032258,
+        "f1-score": 0.6435327154341366,
+        "support": 620.0
+      }
+    },
+    "majority_baseline": {
+      "class": "INFORMATION-TECHNOLOGY",
+      "accuracy": 0.04838709677419355,
+      "macro_f1": 0.0038461538461538464
+    },
+    "limitations": "One stratified holdout; near-duplicates and source bias are not measured."
+  },
+  "api_evaluation": {
+    "holdout_rows": 620,
+    "answered_rows": 620,
+    "correct_answers": 407,
+    "coverage": 1.0,
+    "accuracy_on_answered": 0.6564516129032258,
+    "status_counts": {
+      "200": 620
+    },
+    "dataset": "user_supplied_csv",
+    "test_sha256": "d15868f21e792d002b90e6079e91bbc4dbeab11b3fd3e7cfb21509e78da3a012",
+    "limitations": "Same recorded holdout; not an additional independent evaluation. Full resumes differ from short summaries."
+  }
+}

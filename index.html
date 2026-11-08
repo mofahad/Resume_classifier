@@ -141,30 +141,29 @@
     <nav>
         <div class="logo">Resume Classifier</div>
         <div class="menu">
-            <a href="#">Products</a>
-            <a href="#">Login</a>
+            <a href="#classifier">Try the local demo</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <div class="hero">
-        <h1>Improve Your Resume with AI</h1>
+        <h1>Explore Resume Text Classification</h1>
         <p>
-            This Resume Classifier uses cutting-edge AI to analyze your resume summary and predict the most relevant job role. 
-            Paste your resume summary below to get started!
+            Try a local TF-IDF and logistic regression prototype. The included demo uses synthetic examples
+            and is not validated for hiring decisions. Paste a summary to explore its predictions.
         </p>
-        <button class="cta-btn">Paste Resume Summary</button>
+        <button class="cta-btn" onclick="fillSample()">Use a fictional sample</button>
     </div>
 
     <!-- Main Content Section -->
-    <div class="container">
+    <div class="container" id="classifier">
         <h2>Paste Your Resume Summary</h2>
         <p>
             Please paste the summary of your resume in the text box below. Ensure the text is concise and clear for better predictions.
         </p>
-        <textarea id="resume" placeholder="Enter your resume summary here..."></textarea>
+        <textarea id="resume" aria-label="Resume text or summary" maxlength="50000" placeholder="Enter resume text or a summary here..."></textarea>
         <button type="button" onclick="submitResume()">Classify Resume</button>
-        <div id="result" class="result"></div>
+        <div id="result" class="result" role="status" aria-live="polite"></div>
     </div>
 
     <!-- Footer Section -->
@@ -173,6 +172,13 @@
     </footer>
 
     <script>
+        function fillSample() {
+            const input = document.getElementById('resume');
+            input.value = 'Built Python machine learning models with pandas, feature engineering, model evaluation, and predictive analytics.';
+            document.getElementById('result').textContent = '';
+            input.focus();
+        }
+
         async function submitResume() {
             const resumeText = document.getElementById('resume').value;
             const resultDiv = document.getElementById('result');
@@ -195,9 +201,9 @@
                 }
 
                 // Display the predicted job role
-                resultDiv.innerHTML = `<h3>Predicted Job Role: ${data.job_role}</h3>`;
+                resultDiv.textContent = `Predicted text category: ${data.job_role}. ${data.note}`;
             } catch (error) {
-                resultDiv.innerHTML = `<h3 style="color: red;">Error: ${error.message}</h3>`;
+                resultDiv.textContent = `Error: ${error.message}`;
             }
         }
     </script>
