@@ -141,8 +141,7 @@
     <nav>
         <div class="logo">Resume Classifier</div>
         <div class="menu">
-            <a href="#">Products</a>
-            <a href="#">Login</a>
+            <a href="#classifier">Try the local demo</a>
         </div>
     </nav>
 
@@ -153,11 +152,11 @@
             Try a local TF-IDF and logistic regression prototype. The included demo uses synthetic examples
             and is not validated for hiring decisions. Paste a summary to explore its predictions.
         </p>
-        <button class="cta-btn" onclick="document.getElementById('resume').focus()">Paste Resume Summary</button>
+        <button class="cta-btn" onclick="fillSample()">Use a fictional sample</button>
     </div>
 
     <!-- Main Content Section -->
-    <div class="container">
+    <div class="container" id="classifier">
         <h2>Paste Your Resume Summary</h2>
         <p>
             Please paste the summary of your resume in the text box below. Ensure the text is concise and clear for better predictions.
@@ -173,6 +172,13 @@
     </footer>
 
     <script>
+        function fillSample() {
+            const input = document.getElementById('resume');
+            input.value = 'Built Python machine learning models with pandas, feature engineering, model evaluation, and predictive analytics.';
+            document.getElementById('result').textContent = '';
+            input.focus();
+        }
+
         async function submitResume() {
             const resumeText = document.getElementById('resume').value;
             const resultDiv = document.getElementById('result');

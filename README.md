@@ -2,6 +2,22 @@
 
 A local text-categorization prototype using TF-IDF and class-balanced logistic regression. Train a baseline, inspect holdout metrics, and try predictions through Flask. No paid services or API keys are required.
 
+## Problem and approach
+
+The project explores how a short resume summary can be mapped to a text category. A TF-IDF and logistic regression pipeline keeps training and inference preprocessing together, and Flask serves the resulting model.
+
+```mermaid
+flowchart LR
+  A[Fixture or authorized labeled CSV] --> B[Clean and stratify]
+  B --> C[Fit TF-IDF and logistic regression]
+  B --> D[Held-out evaluation]
+  C --> D
+  C --> E[Save trusted model]
+  E --> F[Flask prediction API]
+```
+
+The synthetic training command and all nine tests passed locally. The browser demo returned a text category for a fictional sample. Use the **Use a fictional sample** button to reproduce it. The small synthetic holdout demonstrates the pipeline and is insufficient to establish real resume accuracy.
+
 ## Run locally
 
 Use Python 3.11 or 3.12:
@@ -56,3 +72,7 @@ Tests cover the page, readiness, inference, invalid requests, long valid resumes
 This prototype categorizes text; it does not rank candidates or determine suitability for employment. Its single labeled-data holdout does not establish performance across other resume sources, short summaries, languages, or demographic groups. It has no fairness validation or production deployment. Requests are processed locally without application-level storage. Only load trusted model artifacts, because joblib deserialization can execute code.
 
 Original notebooks remain as historical experiments. Malformed duplicate notebooks have been restored from their valid counterparts. The repaired command-line path replaces missing model files, the incorrect template directory, and inconsistent preprocessing. Historical notebooks are not the supported execution path.
+
+## See it work
+
+![Recorded local demonstration](docs/portfolio-demo.gif)
